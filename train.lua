@@ -142,6 +142,12 @@ print('Batches: ' .. loader.batch_data.train.nbatches)
 if do_random_init then
     params:uniform(-0.08, 0.08)
 end
+--[[ -- the below is wrong, cause it will change the memory address. so must not use it  
+if not protos.clones then
+    protos.clones = {}
+    protos.clones['lstm'] = utils.clone_many_times(protos.lstm, loader.q_max_length + 1)
+end
+--]]
 
 -- make clones of the LSTM model that shared parameters for subsequent timesteps (unrolling)
 lstm_clones = {}
